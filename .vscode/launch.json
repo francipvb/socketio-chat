@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: FastAPI",
+            "type": "python",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "--reload",
+                "--reload-delay=1.0",
+                "--reload-dir=${workspaceFolder}/socketio_chat",
+                "--factory",
+                "socketio_chat.main:get_app"
+            ],
+            "jinja": true,
+            "justMyCode": true
+        }
+    ]
+}
