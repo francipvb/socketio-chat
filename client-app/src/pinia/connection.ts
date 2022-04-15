@@ -2,9 +2,13 @@ import { defineStore } from "pinia";
 import { User } from "./events";
 import { socket } from "./socket";
 
+interface ConnectionUser extends User {
+  disconnected: boolean;
+}
+
 export interface UserList {
   ids: string[];
-  entities: Record<string, User>;
+  entities: Record<string, ConnectionUser>;
   connected: boolean;
   initialized: boolean;
 }
@@ -25,12 +29,11 @@ export const useConnections = defineStore("connections", {
       if (!this.ids.includes(user.id)) {
         this.ids.push(user.id);
       }
-      this.entities[user.id] = user;
+      this.entities[user.id] = { ...user, disconnected: false };
     },
     removeUser(id: string) {
       if (this.ids.includes(id)) {
-        this.ids = this.ids.filter((i) => i !== id);
-        delete this.entities[id];
+        this.entities[id].disconnected = true;
       }
     },
     initialize() {
@@ -59,7 +62,9 @@ export const useConnections = defineStore("connections", {
   },
   getters: {
     users(): User[] {
-      return this.ids.map((id) => this.entities[id]);
+      return this.ids
+        .map((id) => this.entities[id])
+        .filter((u) => !u.disconnected);
     },
     usersCount(): number {
       return this.ids.length;

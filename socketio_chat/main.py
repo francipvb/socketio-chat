@@ -2,7 +2,6 @@ import pathlib
 
 import fastapi
 import socketio
-from fastapi.exception_handlers import http_exception_handler
 from fastapi.staticfiles import StaticFiles
 
 from .socket import server
