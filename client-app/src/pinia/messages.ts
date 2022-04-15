@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 import { useConnections } from "./connection";
 import { Message } from "./events";
 import { socket } from "./socket";
+import { playMessage } from "./sounds";
 
 export interface MessageList {
   ids: string[];
@@ -52,6 +53,7 @@ export const useMessages = defineStore("messages", {
       }
       this.ids.push(value.id);
       this.entities[message.id] = message;
+      playMessage();
     },
     sendMessage(msg: string) {
       socket.emit("message", msg);

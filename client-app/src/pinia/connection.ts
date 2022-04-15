@@ -2,6 +2,10 @@ import { defineStore } from "pinia";
 import { User } from "./events";
 import { socket } from "./socket";
 
+import login from "../assets/SOUNDS/login.wav";
+import logout from "../assets/SOUNDS/logout.wav";
+import { playLogin, playLogout } from "./sounds";
+
 interface ConnectionUser extends User {
   disconnected: boolean;
 }
@@ -28,12 +32,14 @@ export const useConnections = defineStore("connections", {
     upsertUser(user: User) {
       if (!this.ids.includes(user.id)) {
         this.ids.push(user.id);
+        playLogin();
       }
       this.entities[user.id] = { ...user, disconnected: false };
     },
     removeUser(id: string) {
       if (this.ids.includes(id)) {
         this.entities[id].disconnected = true;
+        playLogout();
       }
     },
     initialize() {

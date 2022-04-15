@@ -33,18 +33,24 @@ const changeName = () => {
     <div class="col-md-6">
       <h2>Messages</h2>
       <ul v-if="messages.messageCount > 0">
-        <li v-for="message in messages.messages">
-          <p>
+        <li v-for="message in messages.messages" :key="message.id">
+          <p
+            :role="
+              message.id === messages.messages[messages.messageCount - 1].id
+                ? 'alert'
+                : 'text'
+            "
+          >
             {{ connections.entities[message.sender].name ?? "Anonymous" }}:
             {{ message.message }}
           </p>
         </li>
       </ul>
       <p v-else>No mesages yet.</p>
-      <div>
-        <input type="text" v-model="msg" />
-        <button @click.prevent="send">send</button>
-      </div>
+      <form @submit.prevent="send()">
+        <input type="text" v-model="msg" required />
+        <button type="submit" :disabled="msg.length <= 0">send</button>
+      </form>
     </div>
   </div>
 </template>
